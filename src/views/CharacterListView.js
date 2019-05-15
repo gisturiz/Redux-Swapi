@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { getInfo } from '../actions';
 import { CharacterList } from "../components";
+import Loader from "react-loader-spinner";
 // import actions
 
 class CharacterListView extends React.Component {
@@ -11,11 +12,13 @@ class CharacterListView extends React.Component {
 
   componentDidMount() {
     // call our action
+    this.props.getInfo();
   }
 
   render() {
-    if (this.props.fetching) {
+    if (this.props.isFetching) {
       // return something here to indicate that you are fetching data
+      <Loader type="Rings" color="#00BFFF" height="90" width="60" />
     }
     return (
       <div className="CharactersList_wrapper">
@@ -27,9 +30,13 @@ class CharacterListView extends React.Component {
 
 // our mapStateToProps needs to have two properties inherited from state
 // the characters and the fetching boolean
+
+const mapStateToProps = state => ({
+  characters: state.charsReducer.characters,
+  isFetching: state.charsReducer.isFetching
+});
+
 export default connect(
-  null /* mapStateToProps replaces null here */,
-  {
-    /* action creators go here */
-  }
+  mapStateToProps, 
+  { getInfo }
 )(CharacterListView);
